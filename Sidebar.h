@@ -5,7 +5,7 @@
 
 class SlideBar {
 public:
-    SlideBar(Pt p, int height, Word lab) : 
+    SlideBar(const Pt& p, int height, const Word& lab) : 
         pos{p}, 
         height{height}, 
         label{lab},
@@ -53,12 +53,12 @@ public:
 private:
     int height;
     Pt pos;
+    Word label;
+    bool mouse_on;
     sf::RectangleShape bs;
     sf::CircleShape but;
-    Word label;
     sf::RectangleShape clr_shp {sf::Vector2f(gv::swid(), gv::hei())};
-    bool mouse_on;
-
+    
     bool on_circle(sf::RenderWindow& win) const {
         sf::Vector2i curr_mouse = sf::Mouse::getPosition(win);
         const double dist = sqrt(

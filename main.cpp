@@ -2,18 +2,21 @@
 #include <iostream>
 #include "Axis.h"
 
-
 int main() {
     Pt mouse_pos {-1, -1};
     Pt curr_del {gv::wid()/2, gv::hei()/2};
 
     sf::RenderWindow window(sf::VideoMode(gv::wid() + gv::swid(), gv::hei()), "SFML works!");
     Axis a {Pt{gv::wid()/2, gv::hei()/2}};
-    a.add_shape(new AxisRectangle{Pt{100, 100}, sf::RectangleShape{sf::Vector2f{100, 30}}, sf::Color::Cyan});
-    a.add_shape(new AxisCircle({Pt{0, 0}, sf::CircleShape{100, 100}, sf::Color(255, 255, 255, 50)}));
-    a.add_shape(new AxisRectangle{Pt{600, 100}, sf::RectangleShape{sf::Vector2f{100, 30}}, sf::Color::Green});
+
+
+    a.add_shape(new AxisRectangle{gPt{3, 2}, sf::RectangleShape{sf::Vector2f{5, 1}}, sf::Color::Cyan});
+    a.add_shape(new AxisCircle{gPt{1,1}, sf::CircleShape{5}, sf::Color(255,255,255,100)});
+
+
     Word www {"dx=dy=", Pt{gv::wid()+100, 330}};
     SlideBar bar {Pt{gv::wid()+100, 400}, 400, www};
+    
     while (window.isOpen())
     {
         sf::Event event;

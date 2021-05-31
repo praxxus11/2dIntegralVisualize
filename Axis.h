@@ -9,24 +9,26 @@
 
 class AxisShape {
 public:
-    AxisShape(Pt pos, sf::Color col = sf::Color::White) : pos{pos}, color{col} {
+    AxisShape(gPt pos, sf::Color col = sf::Color::White) : pos{pos}, color{col} {
     }
     virtual void draw_shape(const Pt& del, sf::RenderWindow& win) = 0;
 protected:
-    Pt pos;
+    gPt pos;
     sf::Color color;
 };
 
 class AxisRectangle : public AxisShape {
 public:
-    AxisRectangle(Pt pos, 
+    AxisRectangle(gPt pos, 
     sf::RectangleShape rect, 
     sf::Color col = sf::Color::White) : 
     AxisShape{pos, col}, 
     sf_rect{rect} {
+        sf::Vector2f old_dim = rect.getSize();
+        sf_rect.setSize(sf::Vector2f(old_dim.x * gv::ggap(), old_dim.y * gv::ggap()));
     }
     void draw_shape(const Pt& del, sf::RenderWindow& win) override {
-        sf_rect.setPosition(pos.x + del.x, pos.y + del.y);
+        sf_rect.setPosition(pos.x * gv::ggap() + del.x, pos.y * gv::ggap() + del.y);
         sf_rect.setFillColor(AxisShape::color);
         win.draw(sf_rect);
     }
@@ -36,15 +38,16 @@ private:
 
 class AxisCircle : public AxisShape {
 public:
-    AxisCircle(Pt pos, 
+    AxisCircle(gPt pos, 
     sf::CircleShape circ, 
     sf::Color col = sf::Color::White) : 
-        AxisShape{pos, col}, 
-        sf_circ{circ} {
+    AxisShape{pos, col}, 
+    sf_circ{circ} {
+        sf_circ.setOrigin(sf_circ.getRadius() * gv::ggap(), sf_circ.getRadius() * gv::ggap());
+        sf_circ.setRadius(sf_circ.getRadius() * gv::ggap());    
     }
     void draw_shape(const Pt& del, sf::RenderWindow& win) override {
-        sf_circ.setOrigin(sf_circ.getRadius(), sf_circ.getRadius());
-        sf_circ.setPosition(pos.x + del.x, pos.y + del.y);
+        sf_circ.setPosition(pos.x * gv::ggap() + del.x, pos.y * gv::ggap() + del.y);
         sf_circ.setFillColor(AxisShape::color);
         win.draw(sf_circ);
     }
@@ -88,20 +91,19 @@ private:
         ax.setPosition(del.x, 0);
         win.draw(ax);
 
-        const int thickness = 50;
-        const int left = -del.x / thickness -1;
-        const int right = (-del.x + gv::wid()) / thickness +1;
-        const int top = -del.y / thickness -1;
-        const int bot = (-del.y + gv::hei()) / thickness +1;
+        const int left = -del.x / gv::ggap() -1;
+        const int right = (-del.x + gv::wid()) / gv::ggap() +1;
+        const int top = -del.y / gv::ggap() -1;
+        const int bot = (-del.y + gv::hei()) / gv::ggap() +1;
 
-        static Word numbering {"", Pt{0,0}};    
+        static Word numbering {};    
         for (int i=left; i<right; i++) {
             sf::RectangleShape ln {sf::Vector2f(1, gv::hei())};
             ln.setFillColor(sf::Color(255, 255, 255,(i%5==0 ? 200 : 100)));
-            ln.setPosition(i*thickness+del.x, 0);
+            ln.setPosition(i*gv::ggap()+del.x, 0);
             win.draw(ln);
             if (!(i%5)) {
-                numbering.set_pos_str(std::to_string(i), Pt{i*thickness,0});
+                numbering.set_pos_str(std::to_string(i), Pt{i*gv::ggap(),0});
                 numbering.draw_shape(del, win);
             }
         }
@@ -109,10 +111,10 @@ private:
         for (int i=top; i<bot; i++) {
             sf::RectangleShape ln {sf::Vector2f(gv::wid(), 1)};
             ln.setFillColor(sf::Color(255, 255, 255,(i%5==0 ? 200 : 100)));
-            ln.setPosition(0, i*thickness+del.y);
+            ln.setPosition(0, i*gv::ggap()+del.y);
             win.draw(ln);
             if (!(i%5)) {
-                numbering.set_pos_str(std::to_string(i), Pt{10, i*thickness-10});
+                numbering.set_pos_str(std::to_string(i), Pt{10, i*gv::ggap()-10});
                 numbering.draw_shape(del, win);
             }
         }

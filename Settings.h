@@ -13,6 +13,9 @@ const int swid() { // the width of the sidebar in pixels
     static const int swid = 300;
     return swid;
 }
-
+const int ggap() { // the gap between grid lines in pixels
+    static const int ggap = 50;
+    return ggap;
+}
 
 }

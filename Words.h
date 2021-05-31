@@ -5,15 +5,15 @@
 
 class Word {
 public:
-    Word(std::string str, Pt pos) : pos{pos} {
-        if (!font.loadFromFile("resource/acid.otf")) std::cout << "Font not loaded";
+    Word(const std::string& str = "", const Pt& pos = Pt{0,0}) : pos{pos} {
+        if (!font.loadFromFile("resource/acid.otf")) 
+            std::cout << "Font not loaded";
         text.setFont(font);
         text.setString(str);
         text.setCharacterSize(24);
         text.setFillColor(sf::Color::White);
         text.setPosition(pos.x, pos.y);
     }
-    ~Word() { std::cout << "<Hello" << " " << std::string(text.getString()) + "> "; }
     void draw_shape(sf::RenderWindow& win) {
         text.setPosition(pos.x, pos.y);
         win.draw(text);

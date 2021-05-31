@@ -7,6 +7,5 @@ struct Pt {
 };
 
 struct gPt : public Pt {
-    int x, y;
-    gPt(int x, int y) : x{x}, y{-y} {}
+    gPt(int x, int y) : Pt(x, -y) {}
 };

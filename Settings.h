@@ -1,3 +1,18 @@
-const int wid = 1200;
-const int hei = 900;
-const int sidebar_wid = 400;
+namespace gv {
+
+
+const int wid() { // the width of the entire window in pixels
+    static const int wid = 900;
+    return wid;
+}
+const int hei() { // the height of the entire window in pixels
+    static const int hei = 900;
+    return hei; 
+}
+const int swid() { // the width of the sidebar in pixels
+    static const int swid = 300;
+    return swid;
+}
+
+
+}

@@ -1,14 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
+#include "Settings.h"
 #include "Pt.h"
 #include "Words.h"
 #include "Sidebar.h"
-#include "Settings.h"
 #pragma once
-
-extern const int wid;
-extern const int hei;
 
 class AxisShape {
 public:
@@ -83,24 +80,24 @@ private:
     std::vector<AxisShape*> axis_shapes;
 
     void draw_axis(sf::RenderWindow& win) {
-        sf::RectangleShape ax {sf::Vector2f(wid, 2)}; // x axis
+        sf::RectangleShape ax {sf::Vector2f(gv::wid(), 2)}; // x axis
         ax.setFillColor(sf::Color::White);
         ax.setPosition(0, del.y);
         win.draw(ax);
-        ax.setSize(sf::Vector2f(2, hei)); // y axis
+        ax.setSize(sf::Vector2f(2, gv::hei())); // y axis
         ax.setPosition(del.x, 0);
         win.draw(ax);
 
         const int thickness = 50;
         const int left = -del.x / thickness -1;
-        const int right = (-del.x + wid) / thickness +1;
+        const int right = (-del.x + gv::wid()) / thickness +1;
         const int top = -del.y / thickness -1;
-        const int bot = (-del.y + hei) / thickness +1;
+        const int bot = (-del.y + gv::hei()) / thickness +1;
 
-        Word numbering {"", Pt{0,0}};    
+        static Word numbering {"", Pt{0,0}};    
         for (int i=left; i<right; i++) {
-            sf::RectangleShape ln {sf::Vector2f(1, hei)};
-            ln.setFillColor(sf::Color(255,255,255,(i%5==0 ? 200 : 100)));
+            sf::RectangleShape ln {sf::Vector2f(1, gv::hei())};
+            ln.setFillColor(sf::Color(255, 255, 255,(i%5==0 ? 200 : 100)));
             ln.setPosition(i*thickness+del.x, 0);
             win.draw(ln);
             if (!(i%5)) {
@@ -110,12 +107,12 @@ private:
         }
         
         for (int i=top; i<bot; i++) {
-            sf::RectangleShape ln {sf::Vector2f(wid, 1)};
-            ln.setFillColor(sf::Color(255,255,255,(i%5==0 ? 200 : 100)));
+            sf::RectangleShape ln {sf::Vector2f(gv::wid(), 1)};
+            ln.setFillColor(sf::Color(255, 255, 255,(i%5==0 ? 200 : 100)));
             ln.setPosition(0, i*thickness+del.y);
             win.draw(ln);
             if (!(i%5)) {
-                numbering.set_pos_str(std::to_string(i), Pt{10,i*thickness-10});
+                numbering.set_pos_str(std::to_string(i), Pt{10, i*thickness-10});
                 numbering.draw_shape(del, win);
             }
         }

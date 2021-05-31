@@ -2,24 +2,18 @@
 #include <iostream>
 #include "Axis.h"
 
-extern const int wid;
-extern const int hei;
-extern const int sidebar_wid;
 
-int main()
-{
-    sf::ContextSettings settings;
-    settings.antialiasingLevel = 8;
+int main() {
+    Pt mouse_pos {-1, -1};
+    Pt curr_del {gv::wid()/2, gv::hei()/2};
 
-    Pt mouse_pos {-1,-1};
-    Pt curr_del {wid/2,hei/2};
-
-    sf::RenderWindow window(sf::VideoMode(wid+sidebar_wid, hei), "SFML works!");
-    Axis a {Pt{wid/2, hei/2}};
-    AxisShape* hi = new AxisRectangle{Pt{100,100}, sf::RectangleShape{sf::Vector2f{100,30}}, sf::Color::Cyan};
-    AxisShape* bye = new AxisCircle({Pt{0,0}, sf::CircleShape{100,100}, sf::Color(255,255,255,50)});
-    a.add_shape(hi);
-    a.add_shape(bye);
+    sf::RenderWindow window(sf::VideoMode(gv::wid() + gv::swid(), gv::hei()), "SFML works!");
+    Axis a {Pt{gv::wid()/2, gv::hei()/2}};
+    a.add_shape(new AxisRectangle{Pt{100, 100}, sf::RectangleShape{sf::Vector2f{100, 30}}, sf::Color::Cyan});
+    a.add_shape(new AxisCircle({Pt{0, 0}, sf::CircleShape{100, 100}, sf::Color(255, 255, 255, 50)}));
+    a.add_shape(new AxisRectangle{Pt{600, 100}, sf::RectangleShape{sf::Vector2f{100, 30}}, sf::Color::Green});
+    Word www {"dx=dy=", Pt{gv::wid()+100, 330}};
+    SlideBar bar {Pt{gv::wid()+100, 400}, 400, www};
     while (window.isOpen())
     {
         sf::Event event;
@@ -33,15 +27,15 @@ int main()
                 mouse_pos.y = event.mouseButton.y;                
             }
         }
-        window.clear();
-
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             sf::Vector2i curr_mouse = sf::Mouse::getPosition(window);
-            if (curr_mouse.x < wid) 
+            if (curr_mouse.x < gv::wid()) 
                 a.set_del(Pt{curr_del.x+curr_mouse.x-mouse_pos.x, curr_del.y+curr_mouse.y-mouse_pos.y});
         }
+        window.clear();
+        // bar.hh(window);
         a.draw(window);
-        sidebar(window);
+        sidebar(window, bar);
         window.display();
     }
     return 0;

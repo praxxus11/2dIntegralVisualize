@@ -37,7 +37,7 @@ public:
             if (new_pos > pos.y+height) new_pos = pos.y+height;
             but.setPosition(pos.x, new_pos);
 
-            label.set_str("dx=" + 
+            label.set_str("dx=dy=" + 
                 (std::to_string(2*
                 ((new_pos-pos.y)/float(height))
             ).substr(0,4)));
@@ -49,7 +49,7 @@ public:
     //DELETE FOR LATER
     void hh(sf::RenderWindow& win) {
         label.test(win);
-       }
+    }
 private:
     int height;
     Pt pos;

@@ -1,11 +1,14 @@
+#pragma once
+
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
+
+
 #include "Settings.h"
 #include "Pt.h"
 #include "Words.h"
 #include "Sidebar.h"
-#pragma once
 
 class AxisShape {
 public:
@@ -22,18 +25,21 @@ public:
     AxisRectangle(gPt pos, 
     sf::RectangleShape rect, 
     sf::Color col = sf::Color::White) : 
-    AxisShape{pos, col}, 
-    sf_rect{rect} {
-        sf::Vector2f old_dim = rect.getSize();
+    AxisShape{pos, col} {
+        old_dim = rect.getSize();
+        sf_rect = rect;
         sf_rect.setSize(sf::Vector2f(old_dim.x * gv::ggap(), old_dim.y * gv::ggap()));
     }
     void draw_shape(const Pt& del, sf::RenderWindow& win) override {
+        sf_rect.setOrigin(sf::Vector2f(0.5 * old_dim.x * gv::ggap(), 0.5 * old_dim.y * gv::ggap()));
+        sf_rect.setSize(sf::Vector2f(old_dim.x * gv::ggap(), old_dim.y * gv::ggap()));
         sf_rect.setPosition(pos.x * gv::ggap() + del.x, pos.y * gv::ggap() + del.y);
         sf_rect.setFillColor(AxisShape::color);
         win.draw(sf_rect);
     }
-private:
+protected:
     sf::RectangleShape sf_rect;
+    sf::Vector2f old_dim;
 };
 
 class AxisCircle : public AxisShape {
@@ -42,18 +48,66 @@ public:
     sf::CircleShape circ, 
     sf::Color col = sf::Color::White) : 
     AxisShape{pos, col}, 
-    sf_circ{circ} {
-        sf_circ.setOrigin(sf_circ.getRadius() * gv::ggap(), sf_circ.getRadius() * gv::ggap());
-        sf_circ.setRadius(sf_circ.getRadius() * gv::ggap());    
+    sf_circ{circ},
+    old_rad{circ.getRadius()} {
     }
     void draw_shape(const Pt& del, sf::RenderWindow& win) override {
+        sf_circ.setOrigin(old_rad * gv::ggap(), old_rad* gv::ggap());
+        sf_circ.setRadius(old_rad * gv::ggap());    
         sf_circ.setPosition(pos.x * gv::ggap() + del.x, pos.y * gv::ggap() + del.y);
         sf_circ.setFillColor(AxisShape::color);
         win.draw(sf_circ);
     }
 private:
     sf::CircleShape sf_circ;
+    double old_rad;
 };
+
+class AxisRectangleDynamic : public AxisRectangle {
+public:
+    AxisRectangleDynamic(gPt pos, 
+        sf::RectangleShape rect, 
+        sf::Color col = sf::Color::White) : 
+        AxisRectangle{pos, rect, col} {
+            outln_thickness = 5;
+            sf_rect.setSize(sf::Vector2f(old_dim.x * gv::ggap(), old_dim.y * gv::ggap()));
+            sf_rect.setOutlineColor(sf::Color::Cyan);
+    }
+    void draw_shape(const Pt& del, sf::RenderWindow& win) override {
+        if (ratio < 1) {
+            tm_so_far += clock.getElapsedTime().asSeconds();
+            clock.restart();
+            if (tm_so_far > gv::dynDelay()) {
+                ratio += 0.01;
+                tm_so_far = 0;
+            }
+        }
+        else if (outln_thickness > 1) {
+            tm_so_far += clock.getElapsedTime().asSeconds();
+            clock.restart();
+            if (tm_so_far > gv::outlnDelay()) {
+                outln_thickness--;
+                tm_so_far = 0;
+            }
+        }
+        sf_rect.setOrigin(sf::Vector2f(ratio * 0.5 * old_dim.x * gv::ggap(), ratio * 0.5 * old_dim.y * gv::ggap()));
+        sf_rect.setSize(sf::Vector2f(ratio * (old_dim.x * gv::ggap()), ratio * (old_dim.y * gv::ggap())));
+        sf_rect.setPosition(pos.x * gv::ggap() + del.x, pos.y * gv::ggap() + del.y);
+        sf_rect.setFillColor(AxisShape::color);
+
+        sf_rect.setOutlineThickness(-outln_thickness);
+
+        win.draw(sf_rect);
+    }
+private:
+    float ratio {0.01};
+    sf::Clock clock;
+    float tm_so_far {0};
+    float outln_thickness;
+};
+
+
+
 
 class Axis {
 public:
@@ -99,7 +153,7 @@ private:
         static Word numbering {};    
         for (int i=left; i<right; i++) {
             sf::RectangleShape ln {sf::Vector2f(1, gv::hei())};
-            ln.setFillColor(sf::Color(255, 255, 255,(i%5==0 ? 200 : 100)));
+            ln.setFillColor(sf::Color(255, 255, 255,(i%5==0 ? 150 : 70)));
             ln.setPosition(i*gv::ggap()+del.x, 0);
             win.draw(ln);
             if (!(i%5)) {
@@ -110,7 +164,7 @@ private:
         
         for (int i=top; i<bot; i++) {
             sf::RectangleShape ln {sf::Vector2f(gv::wid(), 1)};
-            ln.setFillColor(sf::Color(255, 255, 255,(i%5==0 ? 200 : 100)));
+            ln.setFillColor(sf::Color(255, 255, 255,(i%5==0 ? 150 : 70)));
             ln.setPosition(0, i*gv::ggap()+del.y);
             win.draw(ln);
             if (!(i%5)) {

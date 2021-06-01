@@ -5,25 +5,33 @@
 
 class SlideBar {
 public:
-    SlideBar(const Pt& p, int height, const Word& lab) : 
-        pos{p}, 
-        height{height}, 
-        label{lab},
-        bs{sf::Vector2f(5, height)},
-        but{20.f} 
+    enum class Orient {
+        x, y
+    };
+    SlideBar(int length, float max_value, float default_value, Pt pos, std::string str, Orient orient) : 
+        pos{pos}, 
+        max_value{max_value},
+        default_value{default_value},
+        length{length}, 
+        label{str, Pt{pos.x+12,pos.y+12}},
+        orient{orient},
+        ratio_of_length{default_value/max_value}
     {
-        bs.setPosition(pos.x, pos.y);
-        but.setOrigin(but.getRadius(), but.getRadius());
-        but.setPosition(pos.x, pos.y);   
+        slide_line.setPosition(pos.x, pos.y);
+        if (orient == Orient::y) slide_line.setSize(sf::Vector2f(5, length));
+        if (orient == Orient::x) slide_line.setSize(sf::Vector2f(length, 5));
 
-        clr_shp.setPosition(gv::wid(), 0);
-        clr_shp.setFillColor(sf::Color::Black);
+        if (orient == Orient::y) slide_circle.setPosition(pos.x, pos.y + length*(default_value / max_value));   
+        if (orient == Orient::x) slide_circle.setPosition(pos.x + length*(default_value / max_value), pos.y);
+
+        slide_circle.setRadius(20);
+        slide_circle.setOrigin(slide_circle.getRadius(), slide_circle.getRadius());
 
         label.set_size(40);
     }
-    void update(sf::RenderWindow& win) {
-        win.draw(clr_shp);
-        win.draw(bs);
+    void draw_shape(sf::RenderWindow& win) {
+        win.draw(slide_line);
+
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             if (on_circle(win)) {
                 mouse_on = true;
@@ -32,43 +40,53 @@ public:
         else if (mouse_on) mouse_on = false; // mouse is not pressed anymore
 
         if (mouse_on) {
-            int new_pos = sf::Mouse::getPosition(win).y;
-            if (new_pos < pos.y) new_pos = pos.y;
-            if (new_pos > pos.y+height) new_pos = pos.y+height;
-            but.setPosition(pos.x, new_pos);
+            if (orient == Orient::y) {
+                int new_pos = gv::mouseY;
+                if (new_pos < pos.y) new_pos = pos.y;
+                if (new_pos > pos.y+length) new_pos = pos.y + length;
+                slide_circle.setPosition(pos.x, new_pos);
+                ratio_of_length = (new_pos-pos.y)/float(length);
 
-            label.set_str("dx=dy=" + 
-                (std::to_string(2*
-                ((new_pos-pos.y)/float(height))
-            ).substr(0,4)));
+                label.set_str((std::to_string(max_value*ratio_of_length).substr(0,4)));
+            }
+            if (orient == Orient::x) {
+                int new_pos = gv::mouseX;
+                if (new_pos < pos.x) new_pos = pos.x;
+                if (new_pos > pos.x+length) new_pos = pos.x + length;
+                slide_circle.setPosition(new_pos, pos.y);
+                ratio_of_length = (new_pos-pos.x)/float(length);
+
+                label.set_str((std::to_string(max_value*ratio_of_length).substr(0,4)));
+            }
         }
-        win.draw(but);
+
+        win.draw(slide_circle);
         label.draw_shape(win);
     }
-
-    //DELETE FOR LATER
-    void hh(sf::RenderWindow& win) {
-        label.test(win);
+    float getValue() const {
+        return max_value*ratio_of_length;
     }
+
 private:
-    int height;
+    int length;
+    float max_value;
+    float default_value;
     Pt pos;
     Word label;
+    Orient orient;
+
+    sf::RectangleShape slide_line;
+    sf::CircleShape slide_circle;
+    
     bool mouse_on;
-    sf::RectangleShape bs;
-    sf::CircleShape but;
-    sf::RectangleShape clr_shp {sf::Vector2f(gv::swid(), gv::hei())};
+    float ratio_of_length;
     
     bool on_circle(sf::RenderWindow& win) const {
         sf::Vector2i curr_mouse = sf::Mouse::getPosition(win);
         const double dist = sqrt(
-                                pow(curr_mouse.x - but.getPosition().x, 2) +
-                                pow(curr_mouse.y - but.getPosition().y, 2)
+                                pow(curr_mouse.x - slide_circle.getPosition().x, 2) +
+                                pow(curr_mouse.y - slide_circle.getPosition().y, 2)
                             );
-        return (dist-20 < but.getRadius());
+        return (dist < slide_circle.getRadius());
     }
 };
-
-void sidebar(sf::RenderWindow& win, SlideBar& bar) {
-    bar.update(win);
-}

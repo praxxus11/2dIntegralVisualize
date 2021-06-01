@@ -13,7 +13,8 @@
 
 class AxisShape {
 public:
-    AxisShape(gPt pos, sf::Color col = sf::Color::White) : pos{pos}, color{col} {
+    AxisShape(gPt pos, sf::Color col) : pos{pos}, color{col} 
+    {
     }
     virtual void draw_shape(const Pt& del, sf::RenderWindow& win) = 0;
 protected:
@@ -23,88 +24,85 @@ protected:
 
 class AxisRectangle : public AxisShape {
 public:
-    AxisRectangle(gPt pos, 
-    sf::RectangleShape rect, 
-    sf::Color col = sf::Color::White) : 
-    AxisShape{pos, col} {
-        old_dim = rect.getSize();
-        sf_rect = rect;
-        sf_rect.setSize(sf::Vector2f(old_dim.x * gv::ggap(), old_dim.y * gv::ggap()));
+    AxisRectangle(Pt dim, gPt pos, sf::Color col) : 
+        AxisShape{pos, col},
+        dim{dim}
+    {
+        sf_rect.setOrigin(sf::Vector2f(
+            0.5 * dim.x * gv::ggap(), 
+            0.5 * dim.y * gv::ggap()));
+        sf_rect.setSize(sf::Vector2f(
+            dim.x * gv::ggap(), 
+            dim.y * gv::ggap()));
+        sf_rect.setFillColor(col);
     }
     void draw_shape(const Pt& del, sf::RenderWindow& win) override {
-        sf_rect.setOrigin(sf::Vector2f(0.5 * old_dim.x * gv::ggap(), 0.5 * old_dim.y * gv::ggap()));
-        sf_rect.setSize(sf::Vector2f(old_dim.x * gv::ggap(), old_dim.y * gv::ggap()));
-        sf_rect.setPosition(pos.x * gv::ggap() + del.x, pos.y * gv::ggap() + del.y);
-        sf_rect.setFillColor(AxisShape::color);
+        sf_rect.setOrigin(sf::Vector2f(
+            0.5 * dim.x * gv::ggap(), 
+            0.5 * dim.y * gv::ggap()));
+        sf_rect.setSize(sf::Vector2f(
+            dim.x * gv::ggap(), 
+            dim.y * gv::ggap()));
+        sf_rect.setPosition(
+            pos.x * gv::ggap() + del.x, 
+            pos.y * gv::ggap() + del.y);
         win.draw(sf_rect);
     }
 protected:
+    Pt dim;
     sf::RectangleShape sf_rect;
-    sf::Vector2f old_dim;
 };
 
-class AxisCircle : public AxisShape {
-public:
-    AxisCircle(gPt pos, 
-    sf::CircleShape circ, 
-    sf::Color col = sf::Color::White) : 
-    AxisShape{pos, col}, 
-    sf_circ{circ},
-    old_rad{circ.getRadius()} {
-    }
-    void draw_shape(const Pt& del, sf::RenderWindow& win) override {
-        sf_circ.setOrigin(old_rad * gv::ggap(), old_rad* gv::ggap());
-        sf_circ.setRadius(old_rad * gv::ggap());    
-        sf_circ.setPosition(pos.x * gv::ggap() + del.x, pos.y * gv::ggap() + del.y);
-        sf_circ.setFillColor(AxisShape::color);
-        win.draw(sf_circ);
-    }
-private:
-    sf::CircleShape sf_circ;
-    double old_rad;
-};
 
 class AxisRectangleDynamic : public AxisRectangle {
 public:
-    AxisRectangleDynamic(gPt pos, 
-        sf::RectangleShape rect, 
-        sf::Color col = sf::Color::White) : 
-        AxisRectangle{pos, rect, col} {
-            outln_thickness = gv::outlnWid();
-            sf_rect.setSize(sf::Vector2f(old_dim.x * gv::ggap(), old_dim.y * gv::ggap()));
+    AxisRectangleDynamic(Pt dim, gPt pos, sf::Color col, int border_thickness) : 
+        AxisRectangle{dim, pos, col},
+        border_thickness{border_thickness},
+        time_elapsed{0},
+        ratio_of_size{0}
+        {
+            sf_rect.setSize(sf::Vector2f(dim.x * gv::ggap(), dim.y * gv::ggap()));
             sf_rect.setOutlineColor(sf::Color::Cyan);
-    }
+            sf_rect.setFillColor(AxisShape::color);
+        }
     void draw_shape(const Pt& del, sf::RenderWindow& win) override {
-        if (ratio < 1) {
-            tm_so_far += clock.getElapsedTime().asSeconds();
+        if (ratio_of_size < 1) { 
+        // the rectangle is not at full size and is "loading"
+            time_elapsed += clock.getElapsedTime().asSeconds();
             clock.restart();
-            if (tm_so_far > gv::dynDelay()) {
-                ratio += 0.01;
-                tm_so_far = 0;
+            if (time_elapsed > gv::dynDelay()) {
+                time_elapsed = 0;
+                ratio_of_size += 0.01;
             }
         }
-        else if (outln_thickness > 0) {
-            tm_so_far += clock.getElapsedTime().asSeconds();
+        else if (border_thickness > 0) { 
+        // the rectangle is at full size and the border is still present
+            time_elapsed += clock.getElapsedTime().asSeconds();
             clock.restart();
-            if (tm_so_far > gv::outlnDelay()) {
-                outln_thickness--;
-                tm_so_far = 0;
+            if (time_elapsed > gv::outlnDelay()) {
+                time_elapsed = 0;
+                border_thickness--;
             }
         }
-        sf_rect.setOrigin(sf::Vector2f(ratio * 0.5 * old_dim.x * gv::ggap(), ratio * 0.5 * old_dim.y * gv::ggap()));
-        sf_rect.setSize(sf::Vector2f(ratio * (old_dim.x * gv::ggap()), ratio * (old_dim.y * gv::ggap())));
-        sf_rect.setPosition(pos.x * gv::ggap() + del.x, pos.y * gv::ggap() + del.y);
-        sf_rect.setFillColor(AxisShape::color);
-
-        sf_rect.setOutlineThickness(-outln_thickness);
+        sf_rect.setOrigin(sf::Vector2f(
+            ratio_of_size * 0.5 * dim.x * gv::ggap(), 
+            ratio_of_size * 0.5 * dim.y * gv::ggap()));
+        sf_rect.setSize(sf::Vector2f(
+            ratio_of_size * (dim.x * gv::ggap()), 
+            ratio_of_size * (dim.y * gv::ggap())));
+        sf_rect.setPosition(
+            pos.x * gv::ggap() + del.x, 
+            pos.y * gv::ggap() + del.y);
+        sf_rect.setOutlineThickness(-border_thickness);
 
         win.draw(sf_rect);
     }
 private:
-    float ratio {0.01};
+    int border_thickness;
+    float ratio_of_size;
+    float time_elapsed;
     sf::Clock clock;
-    float tm_so_far {0};
-    float outln_thickness;
 };
 
 
@@ -112,9 +110,11 @@ private:
 
 class Axis {
 public:
-    Axis(Pt del) : del{del} {
+    Axis(Pt del) : del{del} 
+    {
     }
-    ~Axis() {
+    ~Axis() 
+    {
         for (AxisShape* shp : axis_shapes) {
             delete shp;
         }
@@ -122,6 +122,9 @@ public:
     void add_shape(AxisShape* shp) {
         axis_shapes.push_back(shp);
     }
+    void remove_latest_shape() {
+        if (axis_shapes.size()) axis_shapes.pop_back();
+    } 
 
     void draw(sf::RenderWindow& win) {
         draw_axis(win);
@@ -158,7 +161,7 @@ private:
             ln.setPosition(i*gv::ggap()+del.x, 0);
             win.draw(ln);
             if (!(i%5)) {
-                numbering.set_pos_str(std::to_string(i), Pt{i*gv::ggap(),0});
+                numbering.set_pos_str(std::to_string(i), Pt(i*gv::ggap(),0));
                 numbering.draw_shape(del, win);
             }
         }
@@ -169,7 +172,7 @@ private:
             ln.setPosition(0, i*gv::ggap()+del.y);
             win.draw(ln);
             if (!(i%5)) {
-                numbering.set_pos_str(std::to_string(i), Pt{10, i*gv::ggap()-10});
+                numbering.set_pos_str(std::to_string(i), Pt(10, i*gv::ggap()-10));
                 numbering.draw_shape(del, win);
             }
         }

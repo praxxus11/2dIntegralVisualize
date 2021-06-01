@@ -2,18 +2,19 @@ namespace gv {
 
 int mouseX = 0;
 int mouseY = 0;
+int lines_gap = 50;
 
 const int wid() { // the width of the entire window in pixels
-    static const int wid = 900; return wid;
+    static const int wid = 1200; return wid;
 }
 const int hei() { // the height of the entire window in pixels
-    static const int hei = 900; return hei; 
+    static const int hei = 800; return hei; 
 }
 const int swid() { // the width of the sidebar in pixels
     static const int swid = 300; return swid;
 }
 const int ggap() { // the gap between grid lines in pixels
-    static const int ggap = 50; return ggap;
+    return lines_gap;
 }
 const float dynDelay() { // return the delay required for block to load in
     static const float delay = 0.0; return delay;

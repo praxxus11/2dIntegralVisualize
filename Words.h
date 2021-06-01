@@ -33,14 +33,6 @@ public:
         text.setCharacterSize(sz);
     }
     
-    //DELETE FOR LATER
-    void test(sf::RenderWindow& win) {
-        text.setString("dei");
-        win.draw(sf::CircleShape(100)); 
-        text.setFillColor(sf::Color::Black);
-        win.draw(text); 
-        // std::cout << std::string(text.getString()) << " "; 
-    }
 private:
     Pt pos;
     sf::Text text;

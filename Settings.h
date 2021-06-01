@@ -1,5 +1,7 @@
 namespace gv {
 
+int mouseX = 0;
+int mouseY = 0;
 
 const int wid() { // the width of the entire window in pixels
     static const int wid = 900; return wid;
@@ -22,7 +24,7 @@ const float outlnDelay() { // return the delay required for the block's outlien 
 const float addrectDelay() { // return the delay between each addition of a new dynamic rectangle
     static const float delay = 0.01; return delay;
 }
-const int outlnWid() {
+const int outlnWid() { // return the width of the outline in dyanmic squares in pixels
     static const int wid = 2; return wid;
 }
 

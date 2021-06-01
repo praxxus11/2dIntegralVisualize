@@ -9,6 +9,7 @@
 #include "Pt.h"
 #include "Words.h"
 #include "Sidebar.h"
+#include "Button.h"
 
 class AxisShape {
 public:

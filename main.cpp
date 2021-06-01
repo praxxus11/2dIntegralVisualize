@@ -10,11 +10,15 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(gv::wid() + gv::swid(), gv::hei()), "SFML works!");
     Axis a {Pt{gv::wid()/2, gv::hei()/2}};
 
+
+    const int xr = 10;
+    const int yr = 10;
+    const float dx = 5.0/xr;
     std::vector<AxisRectangleDynamic*> rects;
-    for (float i=0.5; i<5.5; i++) {
-        for (float j=0.5; j<5.5; j++) {
+    for (float i=dx/2; i<xr*dx + dx/2; i += dx) {
+        for (float j=dx/2; j<yr*dx + dx/2; j += dx) {
             AxisRectangleDynamic* dyn = new 
-                AxisRectangleDynamic{gPt{i, j}, sf::RectangleShape{sf::Vector2f{1, 1}}, sf::Color(255,255,255,100)};
+                AxisRectangleDynamic{gPt{i, j}, sf::RectangleShape{sf::Vector2f{dx, dx}}, sf::Color(255,255,255,100)};
             rects.push_back(dyn);
         }
     }
@@ -47,10 +51,12 @@ int main() {
         }
         time_elapsed += clock.getElapsedTime().asSeconds();
         clock.restart();
-        if (time_elapsed > gv::addrectDelay() && rectNum < 5*5) {
+        if (time_elapsed > gv::addrectDelay() && rectNum < xr*yr) {
+            int prevRect = rectNum;
+            rectNum += int(time_elapsed / (gv::addrectDelay() + 0.0000001));
             time_elapsed = 0;
-            a.add_shape(rects[rectNum]);
-            rectNum++;
+            for (int i=prevRect; i<rectNum && i<xr*yr; i++)
+                a.add_shape(rects[i]);
         }
         window.clear();
         // bar.hh(window);

@@ -69,7 +69,7 @@ public:
         sf::RectangleShape rect, 
         sf::Color col = sf::Color::White) : 
         AxisRectangle{pos, rect, col} {
-            outln_thickness = 5;
+            outln_thickness = gv::outlnWid();
             sf_rect.setSize(sf::Vector2f(old_dim.x * gv::ggap(), old_dim.y * gv::ggap()));
             sf_rect.setOutlineColor(sf::Color::Cyan);
     }
@@ -82,7 +82,7 @@ public:
                 tm_so_far = 0;
             }
         }
-        else if (outln_thickness > 1) {
+        else if (outln_thickness > 0) {
             tm_so_far += clock.getElapsedTime().asSeconds();
             clock.restart();
             if (tm_so_far > gv::outlnDelay()) {

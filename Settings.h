@@ -14,13 +14,16 @@ const int ggap() { // the gap between grid lines in pixels
     static const int ggap = 50; return ggap;
 }
 const float dynDelay() { // return the delay required for block to load in
-    static const float delay = 0.01; return delay;
+    static const float delay = 0.0; return delay;
 }
 const float outlnDelay() { // return the delay required for the block's outlien to fade out
-    static const float delay = 0.02; return delay;
+    static const float delay = 0.0; return delay;
 }
 const float addrectDelay() { // return the delay between each addition of a new dynamic rectangle
-    static const float delay = 0.1; return delay;
+    static const float delay = 0.01; return delay;
+}
+const int outlnWid() {
+    static const int wid = 2; return wid;
 }
 
 }

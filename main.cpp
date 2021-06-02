@@ -38,10 +38,8 @@ int main() {
         gv::mouseX = mousePos.x;
         gv::mouseY = mousePos.y;
 
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-            sf::Vector2i curr_mouse = sf::Mouse::getPosition(window);
-            if (curr_mouse.x < gv::wid()) 
-                a.set_del(Pt(curr_del.x+curr_mouse.x-mouse_pos.x, curr_del.y+curr_mouse.y-mouse_pos.y));
+        if (gv::mouseX < gv::wid() && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            a.set_del(Pt(curr_del.x+gv::mouseX-mouse_pos.x, curr_del.y+gv::mouseY-mouse_pos.y));
         }
 
     

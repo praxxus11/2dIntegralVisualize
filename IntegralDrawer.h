@@ -16,7 +16,7 @@ public:
         del_square {Pt{200,70}, Pt(gv::wid()+30,190), "Pause", sf::Color::Red},
         restart_square {Pt(200,70), Pt(gv::wid()+30,280), "Restart", sf::Color(100,100,100)},
         back_square {Pt(200,70), Pt(gv::wid()+30,370), "Back", sf::Color(100,100,100)},
-        state {State::Stopped},
+        state {State::Drawing},
         pts{integral.get_pts()},
         pts_ind{0},
         time_elapsed{0}

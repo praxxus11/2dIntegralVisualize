@@ -13,14 +13,13 @@ int main() {
     Axis a {curr_del};
 
     SlideBar sizeBar {gv::swid()-50, 100, 50, Pt(gv::wid()+25, 20), "Size", SlideBar::Orient::x};
-    SlideBar bar {300, 10, 1, Pt(gv::wid()+100, 450), "Hello", SlideBar::Orient::y};
 
     IntegralDrawer dr {
         Bound{0}, 
-        Bound{5}, 
-        Bound{[](float x) { return -3; }}, 
-        Bound{[](float x) { return 10; }}, 
-        1, 1, nullptr};
+        Bound{6}, 
+        Bound{[](float x) { return 0; }}, 
+        Bound{[](float x) { return 2*x; }}, 
+        .5, .2, nullptr};
 
     while (window.isOpen())
     {
@@ -49,7 +48,6 @@ int main() {
 
         window.clear();
         a.draw(window);;
-        bar.draw_shape(window);
         sizeBar.draw_shape(window);
         dr.draw(window, a);
         window.display();

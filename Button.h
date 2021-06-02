@@ -9,7 +9,7 @@ public:
     Button(Pt dim, Pt pos, std::string str, sf::Color col) :
         dim{dim},
         pos{pos},
-        label{str, Pt{pos.x+20,pos.y+20}},
+        label{str, Pt{pos.x+5,pos.y-10}},
         color{col} 
     {
         rect.setSize(sf::Vector2f(dim.x, dim.y));

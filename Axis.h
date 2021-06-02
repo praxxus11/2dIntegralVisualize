@@ -76,7 +76,7 @@ public:
                 ratio_of_size += 0.01;
             }
         }
-        else if (border_thickness > 0) { 
+        else if (border_thickness > 1) { 
         // the rectangle is at full size and the border is still present
             time_elapsed += clock.getElapsedTime().asSeconds();
             clock.restart();
@@ -123,7 +123,10 @@ public:
         axis_shapes.push_back(shp);
     }
     void remove_latest_shape() {
-        if (axis_shapes.size()) axis_shapes.pop_back();
+        if (axis_shapes.size()) {
+            delete axis_shapes.back();
+            axis_shapes.pop_back();
+        }
     } 
 
     void draw(sf::RenderWindow& win) {
@@ -157,10 +160,10 @@ private:
         static Word numbering {};    
         for (int i=left; i<right; i++) {
             sf::RectangleShape ln {sf::Vector2f(1, gv::hei())};
-            ln.setFillColor(sf::Color(255, 255, 255,(i%5==0 ? 150 : 70)));
+            ln.setFillColor(sf::Color(255, 255, 255,(i%4==0 ? 150 : 70)));
             ln.setPosition(i*gv::ggap()+del.x, 0);
             win.draw(ln);
-            if (!(i%5)) {
+            if (!(i%2)) {
                 numbering.set_pos_str(std::to_string(i), Pt(i*gv::ggap(),0));
                 numbering.draw_shape(del, win);
             }
@@ -168,10 +171,10 @@ private:
         
         for (int i=top; i<bot; i++) {
             sf::RectangleShape ln {sf::Vector2f(gv::wid(), 1)};
-            ln.setFillColor(sf::Color(255, 255, 255,(i%5==0 ? 150 : 70)));
+            ln.setFillColor(sf::Color(255, 255, 255,(i%4==0 ? 150 : 70)));
             ln.setPosition(0, i*gv::ggap()+del.y);
             win.draw(ln);
-            if (!(i%5)) {
+            if (!(i%2)) {
                 numbering.set_pos_str(std::to_string(i), Pt(10, i*gv::ggap()-10));
                 numbering.draw_shape(del, win);
             }

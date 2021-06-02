@@ -23,7 +23,7 @@ const float outlnDelay() { // return the delay required for the block's outlien 
     static const float delay = 0.0; return delay;
 }
 const float addrectDelay() { // return the delay between each addition of a new dynamic rectangle
-    static const float delay = 0.01; return delay;
+    static const float delay = .1; return delay;
 }
 const int outlnWid() { // return the width of the outline in dyanmic squares in pixels
     static const int wid = 2; return wid;

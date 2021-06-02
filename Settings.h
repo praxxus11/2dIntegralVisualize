@@ -17,16 +17,16 @@ const int ggap() { // the gap between grid lines in pixels
     return lines_gap;
 }
 const float dynDelay() { // return the delay required for block to load in
-    static const float delay = 0.0; return delay;
+    static const float delay = 0.005; return delay;
 }
 const float outlnDelay() { // return the delay required for the block's outlien to fade out
-    static const float delay = 0.0; return delay;
+    static const float delay = 0.1; return delay;
 }
 const float timeToRender() { // return the delay between each addition of a new dynamic rectangle
     static const float render_time = 2; return render_time;
 }
 const int outlnWid() { // return the width of the outline in dyanmic squares in pixels
-    static const int wid = 2; return wid;
+    static const int wid = 1; return wid;
 }
 
 }

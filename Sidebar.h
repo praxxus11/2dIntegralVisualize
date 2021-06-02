@@ -82,10 +82,9 @@ private:
     float ratio_of_length;
     
     bool on_circle(sf::RenderWindow& win) const {
-        sf::Vector2i curr_mouse = sf::Mouse::getPosition(win);
         const double dist = sqrt(
-                                pow(curr_mouse.x - slide_circle.getPosition().x, 2) +
-                                pow(curr_mouse.y - slide_circle.getPosition().y, 2)
+                                pow(gv::mouseX - slide_circle.getPosition().x, 2) +
+                                pow(gv::mouseY - slide_circle.getPosition().y, 2)
                             );
         return (dist < slide_circle.getRadius());
     }

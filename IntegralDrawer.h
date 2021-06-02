@@ -45,10 +45,10 @@ public:
             const int toAdd = int(time_elapsed/add_delay);
             for (int i=0; i<toAdd && pts_ind<pts->size(); i++, pts_ind++) {
                 a.add_shape(new 
-                    AxisRectangleDynamic{Pt(dx,dy), gPt((*pts)[pts_ind].x, (*pts)[pts_ind].y), sf::Color(255,0,0,100), 1});
+                    AxisRectangleDynamic{Pt(dx,dy), gPt((*pts)[pts_ind].x, (*pts)[pts_ind].y), sf::Color(255,0,0,100), 3});
                     // AxisRectangle{Pt(dx,dy), gPt((*pts)[pts_ind].x, (*pts)[pts_ind].y), sf::Color(255,0,0,100)});
             }
-            time_elapsed = time_elapsed - add_delay*toAdd;
+            time_elapsed -= add_delay*toAdd;
         }
     }
 private:

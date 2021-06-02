@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
+#include <math.h>
 
 
 #include "Settings.h"
@@ -63,7 +64,7 @@ public:
         ratio_of_size{0}
         {
             sf_rect.setSize(sf::Vector2f(dim.x * gv::ggap(), dim.y * gv::ggap()));
-            sf_rect.setOutlineColor(sf::Color::Cyan);
+            sf_rect.setOutlineColor(sf::Color(255,255,255,200));
             sf_rect.setFillColor(AxisShape::color);
         }
     void draw_shape(const Pt& del, sf::RenderWindow& win) override {
@@ -72,8 +73,9 @@ public:
             time_elapsed += clock.getElapsedTime().asSeconds();
             clock.restart();
             if (time_elapsed > gv::dynDelay()) {
-                time_elapsed = 0;
-                ratio_of_size += 0.01;
+                const int incrmt_steps = int(time_elapsed / gv::dynDelay());
+                ratio_of_size = std::min(ratio_of_size + 0.01*incrmt_steps, 1.0);
+                time_elapsed -= gv::dynDelay()*incrmt_steps;
             }
         }
         else if (border_thickness > 1) { 
@@ -85,16 +87,18 @@ public:
                 border_thickness--;
             }
         }
+        const float new_dim_x = ratio_of_size * (dim.x * gv::ggap());
+        const float new_dim_y =  ratio_of_size * (dim.y * gv::ggap());  
         sf_rect.setOrigin(sf::Vector2f(
             ratio_of_size * 0.5 * dim.x * gv::ggap(), 
             ratio_of_size * 0.5 * dim.y * gv::ggap()));
         sf_rect.setSize(sf::Vector2f(
-            ratio_of_size * (dim.x * gv::ggap()), 
-            ratio_of_size * (dim.y * gv::ggap())));
+            new_dim_x, 
+            new_dim_y));
         sf_rect.setPosition(
             pos.x * gv::ggap() + del.x, 
             pos.y * gv::ggap() + del.y);
-        sf_rect.setOutlineThickness(-border_thickness);
+        sf_rect.setOutlineThickness((std::min(new_dim_x, new_dim_y) <= 4) ? 0 : -border_thickness);
 
         win.draw(sf_rect);
     }

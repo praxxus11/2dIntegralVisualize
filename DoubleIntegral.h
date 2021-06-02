@@ -12,9 +12,9 @@ typedef std::function<float(float)> One_var_fn; // R => R
 struct Bound {
     Bound(float val) : val{val} {}
     Bound(One_var_fn fnc) : fnc{fnc} {}
-    float value(float input) const { return (is_dependent() ? fnc(input) : val); }
-    float value() const { assert(!is_dependent()); return val; }
-    bool is_dependent() const { return (fnc != nullptr); }
+    inline float value(float input) const { return (is_dependent() ? fnc(input) : val); }
+    inline float value() const { assert(!is_dependent()); return val; }
+    inline bool is_dependent() const { return (fnc != nullptr); }
 private:
     float val;
     One_var_fn fnc;

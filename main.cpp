@@ -18,9 +18,10 @@ int main() {
     IntegralDrawer dr {
         Bound{0}, 
         Bound{5}, 
-        Bound{[](float x) { return 0; }}, 
-        Bound{[](float x) { return 2*x; }}, 
+        Bound{[](float x) { return -3; }}, 
+        Bound{[](float x) { return 10; }}, 
         1, 1, nullptr};
+
     while (window.isOpen())
     {
         sf::Event event;

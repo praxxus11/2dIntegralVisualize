@@ -7,10 +7,10 @@
 
 int main() {
     Pt mouse_pos (-1, -1);
-    Pt curr_del (gv::wid()/2, gv::hei()/2);
+    Pt curr_del (gv::wid()/4, gv::hei()/1.2);
 
     sf::RenderWindow window(sf::VideoMode(gv::wid() + gv::swid(), gv::hei()), "SFML works!");
-    Axis a {Pt(gv::wid()/2, gv::hei()/2)};
+    Axis a {curr_del};
 
     SlideBar sizeBar {gv::swid()-50, 100, 50, Pt(gv::wid()+25, 20), "Size", SlideBar::Orient::x};
     SlideBar bar {300, 10, 1, Pt(gv::wid()+100, 450), "Hello", SlideBar::Orient::y};
@@ -18,9 +18,9 @@ int main() {
     IntegralDrawer dr {
         Bound{0}, 
         Bound{5}, 
-        Bound{0}, 
-        Bound{5}, 
-        1, 0.5, nullptr};
+        Bound{[](float x) { return 0; }}, 
+        Bound{[](float x) { return 2*x; }}, 
+        1, 1, nullptr};
     while (window.isOpen())
     {
         sf::Event event;

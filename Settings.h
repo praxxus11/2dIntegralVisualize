@@ -8,7 +8,7 @@ const int wid() { // the width of the entire window in pixels
     static const int wid = 1200; return wid;
 }
 const int hei() { // the height of the entire window in pixels
-    static const int hei = 800; return hei; 
+    static const int hei = 900; return hei; 
 }
 const int swid() { // the width of the sidebar in pixels
     static const int swid = 300; return swid;
@@ -22,8 +22,8 @@ const float dynDelay() { // return the delay required for block to load in
 const float outlnDelay() { // return the delay required for the block's outlien to fade out
     static const float delay = 0.0; return delay;
 }
-const float addrectDelay() { // return the delay between each addition of a new dynamic rectangle
-    static const float delay = .1; return delay;
+const float timeToRender() { // return the delay between each addition of a new dynamic rectangle
+    static const float render_time = 2; return render_time;
 }
 const int outlnWid() { // return the width of the outline in dyanmic squares in pixels
     static const int wid = 2; return wid;

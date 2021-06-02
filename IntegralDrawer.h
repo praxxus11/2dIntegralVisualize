@@ -40,13 +40,15 @@ public:
     void draw(sf::RenderWindow& win, Axis& a) {
         time_elapsed += clock.getElapsedTime().asSeconds();
         clock.restart();
-        if (time_elapsed > gv::addrectDelay()) {
-            int toAdd = int(time_elapsed/gv::addrectDelay());
+        const float add_delay = gv::timeToRender()/(pts->size());
+        if (time_elapsed > add_delay) {
+            const int toAdd = int(time_elapsed/add_delay);
             for (int i=0; i<toAdd && pts_ind<pts->size(); i++, pts_ind++) {
                 a.add_shape(new 
                     AxisRectangleDynamic{Pt(dx,dy), gPt((*pts)[pts_ind].x, (*pts)[pts_ind].y), sf::Color(255,0,0,100), 1});
+                    // AxisRectangle{Pt(dx,dy), gPt((*pts)[pts_ind].x, (*pts)[pts_ind].y), sf::Color(255,0,0,100)});
             }
-            time_elapsed = time_elapsed - gv::addrectDelay()*toAdd;
+            time_elapsed = time_elapsed - add_delay*toAdd;
         }
     }
 private:

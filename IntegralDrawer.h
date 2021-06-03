@@ -34,7 +34,6 @@ public:
         dx = change_dx.getValue();
         dy = change_dy.getValue();
         integral.set_dxdy(dx, dy);
-
         
         if (next_square.is_clicked()) state = State::Drawing;
         if (del_square.is_clicked()) state = State::Stopped;

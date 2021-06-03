@@ -46,8 +46,6 @@ public:
                 if (new_pos > pos.y+length) new_pos = pos.y + length;
                 slide_circle.setPosition(pos.x, new_pos);
                 ratio_of_length = (new_pos-pos.y)/float(length);
-
-                label.set_str((std::to_string(max_value*ratio_of_length).substr(0,4)));
             }
             if (orient == Orient::x) {
                 int new_pos = gv::mouseX;
@@ -55,16 +53,15 @@ public:
                 if (new_pos > pos.x+length) new_pos = pos.x + length;
                 slide_circle.setPosition(new_pos, pos.y);
                 ratio_of_length = (new_pos-pos.x)/float(length);
-
-                label.set_str((std::to_string(max_value*ratio_of_length).substr(0,4)));
             }
+            label.set_str((label.get_str() + "=" + std::to_string(max_value*ratio_of_length).substr(0,4)));
         }
 
         win.draw(slide_circle);
         label.draw_shape(win);
     }
     float getValue() const {
-        return max_value*ratio_of_length;
+        return max_value*ratio_of_length + 0.000001; // ensure that min value != 0
     }
 
 private:

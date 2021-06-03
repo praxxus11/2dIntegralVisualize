@@ -32,14 +32,31 @@ public:
         fnc{fnc} 
     {
     }
-    std::vector<Pt>* get_pts() { // just dydx for now
-        std::vector<Pt>* pts = new std::vector<Pt>;
+    Pt next_pt(Pt curr) {
+        // these constants are to offset potential erros with bad precision
+        if (curr.y + dy - 0.00001 > d.value(curr.x)) {
+            if (curr.x + dx - 0.00001 > b.value()) {
+                return Pt(999,999); // no more points left
+            }
+            return Pt(curr.x + dx, c.value(curr.x + dx) + 0.5*dy); 
+            // no more points in inner integral
+            // add term 0.5*dy to adjust for midpoint issues 
+            // (since the pos of rectanlge represents midpoint)
+        }
+        return Pt(curr.x, curr.y + dy); // exist point to add
+    }
+    int tot_regions() { // returns total regions possible with current dx, dy configuration
+        int ct = 0;
         for (float i=a.value()+dx; i<b.value()+0.001; i+=dx) {
             for (float j=c.value(i)+dy; j<d.value(i)+0.001; j+=dy) {
-                pts->push_back(Pt(i-0.5*dx,j-0.5*dy));
+                ct++;
             }
         }
-        return pts;
+        return ct;
+    }
+    void set_dxdy(float DX, float DY) {
+        dx = DX;
+        dy = DY;
     }
 private:
     Bound a, b, c, d;

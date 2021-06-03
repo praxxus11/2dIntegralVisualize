@@ -5,7 +5,7 @@
 
 class Word {
 public:
-    Word(const std::string& str = "", const Pt& pos = Pt{0,0}) : pos{pos} {
+    Word(const std::string& str = "", const Pt& pos = Pt{0,0}) : pos{pos}, str{str} {
         if (!font.loadFromFile("resource/acid.otf")) 
             std::cout << "Font not loaded";
         text.setFont(font);
@@ -32,9 +32,12 @@ public:
     void set_size(const int& sz) {
         text.setCharacterSize(sz);
     }
-    
+    inline std::string get_str() const {
+        return str;
+    }
 private:
     Pt pos;
     sf::Text text;
     sf::Font font;
+    std::string str;
 };

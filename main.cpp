@@ -12,14 +12,14 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(gv::wid() + gv::swid(), gv::hei()), "SFML works!");
     Axis a {curr_del};
 
-    SlideBar sizeBar {gv::swid()-50, 100, 50, Pt(gv::wid()+25, 20), "Size", SlideBar::Orient::x};
+    SlideBar sizeBar {gv::swid()-50, 100, 50, Pt(gv::wid()+25, 20), "Zoom", SlideBar::Orient::x};
 
     IntegralDrawer dr {
-        Bound{0}, 
-        Bound{6}, 
-        Bound{[](float x) { return 0; }}, 
-        Bound{[](float x) { return 2*x; }}, 
-        .5, .2, nullptr};
+        Bound{-5}, 
+        Bound{5}, 
+        Bound{[](float x) { return -sqrt(25-x*x); }}, 
+        Bound{[](float x) { return sqrt(25-x*x); }}, 
+        0.5, 0.5, nullptr};
 
     while (window.isOpen())
     {
@@ -41,8 +41,6 @@ int main() {
         if (gv::mouseX < gv::wid() && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             a.set_del(Pt(curr_del.x+gv::mouseX-mouse_pos.x, curr_del.y+gv::mouseY-mouse_pos.y));
         }
-
-    
 
         window.clear();
         a.draw(window);;

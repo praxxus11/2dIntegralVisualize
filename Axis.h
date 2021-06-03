@@ -98,7 +98,7 @@ public:
         sf_rect.setPosition(
             pos.x * gv::ggap() + del.x, 
             pos.y * gv::ggap() + del.y);
-        sf_rect.setOutlineThickness((std::min(new_dim_x, new_dim_y) <= 4) ? 0 : -border_thickness);
+        sf_rect.setOutlineThickness((std::min(new_dim_x, new_dim_y) <= 6) ? 0 : -border_thickness);
 
         win.draw(sf_rect);
     }

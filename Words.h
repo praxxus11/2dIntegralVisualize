@@ -5,8 +5,8 @@
 
 class Word {
 public:
-    Word(const std::string& str = "", const Pt& pos = Pt{0,0}) : pos{pos}, str{str} {
-        if (!font.loadFromFile("resource/acid.otf")) 
+    Word(const std::string& str = "", const Pt& pos = Pt{0,0}, const std::string& font_file = "resource/acid.otf") : pos{pos}, str{str} {
+        if (!font.loadFromFile(font_file)) 
             std::cout << "Font not loaded";
         text.setFont(font);
         text.setString(str);

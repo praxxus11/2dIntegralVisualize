@@ -10,6 +10,8 @@ int main() {
     Pt curr_del (gv::wid()/4, gv::hei()/1.2);
 
     sf::RenderWindow window(sf::VideoMode(gv::wid() + gv::swid(), gv::hei()), "SFML works!");
+    window.setFramerateLimit(60);
+
     Axis a {curr_del};
 
     SlideBar sizeBar {gv::swid()-50, 100, 50, Pt(gv::wid()+25, 20), "Zoom", SlideBar::Orient::x};
@@ -19,7 +21,8 @@ int main() {
         Bound{5}, 
         Bound{[](float x) { return -sqrt(25-x*x); }}, 
         Bound{[](float x) { return sqrt(25-x*x); }}, 
-        0.5, 0.5, nullptr};
+        1, 1, 
+        [](float a, float b) { return 1.0; }};
 
     while (window.isOpen())
     {
@@ -43,9 +46,9 @@ int main() {
         }
 
         window.clear();
-        a.draw(window);;
-        sizeBar.draw_shape(window);
+        a.draw(window);
         dr.draw(window, a);
+        sizeBar.draw_shape(window);
         window.display();
 
         gv::lines_gap = sizeBar.getValue();

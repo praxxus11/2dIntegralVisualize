@@ -58,6 +58,9 @@ public:
         dx = DX;
         dy = DY;
     }
+    float fnc_value(float a, float b) {
+        return fnc(a, b);
+    }
 private:
     Bound a, b, c, d;
     float dx, dy;

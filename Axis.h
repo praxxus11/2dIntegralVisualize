@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <math.h>
+#include <assert.h>
 
 
 #include "Settings.h"
@@ -18,6 +19,7 @@ public:
     {
     }
     virtual void draw_shape(const Pt& del, sf::RenderWindow& win) = 0;
+    virtual sf::Vector2f get_position() const = 0;
 protected:
     gPt pos;
     sf::Color color;
@@ -48,6 +50,9 @@ public:
             pos.x * gv::ggap() + del.x, 
             pos.y * gv::ggap() + del.y);
         win.draw(sf_rect);
+    }
+    sf::Vector2f get_position() const override {
+        return sf_rect.getPosition();
     }
 protected:
     Pt dim;
@@ -132,7 +137,10 @@ public:
             axis_shapes.pop_back();
         }
     } 
-
+    sf::Vector2f get_exact_position() const {
+        assert(axis_shapes.size());
+        return axis_shapes.back()->get_position();
+    }
     void draw(sf::RenderWindow& win) {
         draw_axis(win);
         for (AxisShape* shp : axis_shapes) {

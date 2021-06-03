@@ -34,8 +34,8 @@ public:
     }
     Pt next_pt(Pt curr) {
         // these constants are to offset potential erros with bad precision
-        if (curr.y + dy - 0.00001 > d.value(curr.x)) {
-            if (curr.x + dx - 0.00001 > b.value()) {
+        if (curr.y + dy - 0.0000001 > d.value(curr.x)) {
+            if (curr.x + dx - 0.0000001 > b.value()) {
                 return Pt(999,999); // no more points left
             }
             return Pt(curr.x + dx, c.value(curr.x + dx) + 0.5*dy); 
@@ -54,12 +54,24 @@ public:
         }
         return ct;
     }
-    void set_dxdy(float DX, float DY) {
+    inline void set_dxdy(float DX, float DY) {
         dx = DX;
         dy = DY;
     }
-    float fnc_value(float a, float b) {
+    inline float fnc_value(float a, float b) {
         return fnc(a, b);
+    }
+    inline float get_a() const {
+        return a.value();
+    }
+    inline float get_b() const {
+        return b.value();
+    }
+    inline float get_c(float x) const {
+        return c.value(x);
+    }
+    inline float get_d(float x) const {
+        return d.value(x);
     }
 private:
     Bound a, b, c, d;

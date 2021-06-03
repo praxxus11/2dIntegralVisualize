@@ -138,7 +138,7 @@ public:
         }
     } 
     sf::Vector2f get_exact_position() const {
-        assert(axis_shapes.size());
+        assert(axis_shapes.size()>=1);
         return axis_shapes.back()->get_position();
     }
     void draw(sf::RenderWindow& win) {

@@ -21,8 +21,8 @@ int main() {
         Bound{5}, 
         Bound{[](float x) { return -sqrt(25-x*x); }}, 
         Bound{[](float x) { return sqrt(25-x*x); }}, 
-        0.7, 0.2, 
-        [](float a, float b) { return 1.0; }};
+        1, 1, 
+        [](float a, float b) { return 2 * sqrt(25 - a*a - b*b); }};
 
     while (window.isOpen())
     {

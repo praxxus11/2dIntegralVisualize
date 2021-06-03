@@ -22,8 +22,8 @@ public:
         del_square {Pt{200,70}, Pt(gv::wid()+30,190), "Pause", sf::Color::Red},
         restart_square {Pt(200,70), Pt(gv::wid()+30,280), "Restart", sf::Color(100,100,100)},
         state {State::Drawing},
-        change_dx {int(0.2*gv::hei()), 3.0, dx, Pt(gv::wid()+0.1*gv::swid(), 0.75*gv::hei()), "DX", SlideBar::Orient::y},
-        change_dy {int(0.2*gv::hei()), 3.0, dy, Pt(gv::wid()+0.6*gv::swid(), 0.75*gv::hei()), "DY", SlideBar::Orient::y},
+        change_dx {int(0.45*gv::hei()), 3.0, dx, Pt(gv::wid()+0.13*gv::swid(), 0.5*gv::hei()), "DX", SlideBar::Orient::y},
+        change_dy {int(0.45*gv::hei()), 3.0, dy, Pt(gv::wid()+0.57*gv::swid(), 0.5*gv::hei()), "DY", SlideBar::Orient::y},
         time_elapsed{0}
     {
         value_label.set_size(40);
@@ -118,7 +118,7 @@ public:
         }
         lb_fmt << "Integral value: " << total_value;
         value_label.set_size(45);
-        value_label.set_pos_str(lb_fmt.str(), Pt(gv::wid()-435,gv::hei()-90));
+        value_label.set_pos_str(lb_fmt.str(), Pt(gv::wid()-450,gv::hei()-90));
         value_label.draw_shape(win);
         lb_fmt.str("");
     }

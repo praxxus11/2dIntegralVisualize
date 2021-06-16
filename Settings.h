@@ -2,10 +2,11 @@ namespace gv {
 
 int mouseX = 0;
 int mouseY = 0;
-int lines_gap = 50;
+int lines_gap = 250;
+bool window_focused = 1;
 
 const int wid() { // the width of the entire window in pixels
-    static const int wid = 1200; return wid;
+    static const int wid = 1600; return wid;
 }
 const int hei() { // the height of the entire window in pixels
     static const int hei = 900; return hei; 
@@ -23,7 +24,7 @@ const float outlnDelay() { // return the delay required for the block's outlien 
     static const float delay = 0.1; return delay;
 }
 const float timeToRender() { // return the delay between each addition of a new dynamic rectangle
-    static const float render_time = 2; return render_time;
+    static const float render_time = 12.5; return render_time;
 }
 const int outlnWid() { // return the width of the outline in dyanmic squares in pixels
     static const int wid = 1; return wid;

@@ -1,16 +1,10 @@
-name=main
-
-all: compile link run clean
+all: compile link run 
 
 compile:
 	g++ -Iinclude -c *.cpp 
 
 link:
-	g++ *.o -o ${name} -Llib -lsfml-graphics -lsfml-window -lsfml-system
+	g++ *.o -o main -Llib -lsfml-graphics -lsfml-window -lsfml-system
 
 run:
-	${name}
-
-clean:
-	echo Success
-	
+	main

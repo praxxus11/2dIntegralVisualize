@@ -7,22 +7,22 @@
 
 int main() {
     Pt mouse_pos (-1, -1);
-    Pt curr_del (gv::wid()/4, gv::hei()/1.2);
+    Pt curr_del (gv::wid()/2, gv::hei()/2);
 
-    sf::RenderWindow window(sf::VideoMode(gv::wid() + gv::swid(), gv::hei()), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(gv::wid() + gv::swid(), gv::hei()), "");
     window.setFramerateLimit(60);
 
     Axis a {curr_del};
 
-    SlideBar sizeBar {gv::swid()-50, 100, 50, Pt(gv::wid()+25, 20), "Zoom", SlideBar::Orient::x};
+    SlideBar sizeBar {gv::swid()-50, 300, float(gv::ggap()), Pt(gv::wid()+25, 20), "Zoom", SlideBar::Orient::x};
 
     IntegralDrawer dr {
         Bound{-5}, 
         Bound{5}, 
-        Bound{[](float x) { return -sqrt(25-x*x); }}, 
-        Bound{[](float x) { return sqrt(25-x*x); }}, 
-        1, 1, 
-        [](float a, float b) { return 2 * sqrt(25 - a*a - b*b); }};
+        Bound{[](float x) { return -abs(sin(x)); }}, 
+        Bound{[](float x) { return sqrt(81-x*x); }}, 
+        0.5, 0.5, 
+        [](float a, float b) { return a*a+b; }};
 
     while (window.isOpen())
     {
@@ -36,12 +36,16 @@ int main() {
                 mouse_pos.x = event.mouseButton.x;
                 mouse_pos.y = event.mouseButton.y;                
             }
+            if (event.type == sf::Event::GainedFocus) 
+                gv::window_focused = 1;
+            if (event.type == sf::Event::LostFocus) 
+                gv::window_focused = 0;
         }
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         gv::mouseX = mousePos.x;
         gv::mouseY = mousePos.y;
 
-        if (gv::mouseX < gv::wid() && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        if (gv::window_focused && gv::mouseX < gv::wid() && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             a.set_del(Pt(curr_del.x+gv::mouseX-mouse_pos.x, curr_del.y+gv::mouseY-mouse_pos.y));
         }
 

@@ -62,7 +62,7 @@ public:
                         while (toAdd-- && curr_region.x != 999) {
                             total_value += dx * dy * integral.fnc_value(curr_region.x, curr_region.y);
                             a.add_shape(new 
-                                AxisRectangleDynamic{Pt(dx,dy), gPt(curr_region.x, curr_region.y), sf::Color(255,0,0,100), 2});
+                                AxisRectangleDynamic{Pt(dx,dy), gPt(curr_region.x, curr_region.y), sf::Color(30,220,120,150), 2});
                             prev_region = curr_region;
                             curr_region = integral.next_pt(curr_region);
                             regions++;

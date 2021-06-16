@@ -114,9 +114,6 @@ private:
     sf::Clock clock;
 };
 
-
-
-
 class Axis {
 public:
     Axis(Pt del) : del{del} 
@@ -169,7 +166,8 @@ private:
         const int top = -del.y / gv::ggap() -1;
         const int bot = (-del.y + gv::hei()) / gv::ggap() +1;
 
-        static Word numbering {};    
+        static Word numbering {"", Pt{0,0}, "resource/mathfont.ttf"};    
+        numbering.set_size(20);
         for (int i=left; i<right; i++) {
             sf::RectangleShape ln {sf::Vector2f(1, gv::hei())};
             ln.setFillColor(sf::Color(255, 255, 255,(i%4==0 ? 150 : 70)));
@@ -187,7 +185,7 @@ private:
             ln.setPosition(0, i*gv::ggap()+del.y);
             win.draw(ln);
             if (!(i%2)) {
-                numbering.set_pos_str(std::to_string(i), Pt(10, i*gv::ggap()-10));
+                numbering.set_pos_str(std::to_string(-i), Pt(10, i*gv::ggap()-10));
                 numbering.draw_shape(del, win);
             }
         }

@@ -4,7 +4,7 @@ Visualizes the 2d integral. Freely change the bounds of integration and function
 
 ### Demonstration Video
 
-### https://www.youtube.com/watch?v=AJFeiK_kP-Y
+[Source to video](https://www.youtube.com/watch?v=AJFeiK_kP-Y)
 
 ### Images
 

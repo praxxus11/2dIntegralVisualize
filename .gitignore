@@ -2,6 +2,4 @@
 *.exe
 *.o
 *.vscode
-include
-lib
 todolist.txt

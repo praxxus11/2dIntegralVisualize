@@ -1,10 +1,10 @@
-all: compile link run 
+all: compile link run
 
 compile:
-	g++ -Iinclude -c *.cpp 
+	g++ -Iinclude -IC:/Users/Eric/Documents/cpplibs/includes/SFML/include -c src/*.cpp
 
 link:
-	g++ *.o -o main -Llib -lsfml-graphics -lsfml-window -lsfml-system
+	g++ *.o -o main -LC:/Users/Eric/Documents/cpplibs/libraries/SFML/lib -lsfml-graphics -lsfml-window -lsfml-system
 
-run:
+run: 
 	main
